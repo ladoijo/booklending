@@ -1,6 +1,6 @@
 package com.library.booklending.exception;
 
-import com.library.booklending.dto.ApiRespDto;
+import com.library.booklending.dto.ApiErrorRespDto;
 import com.library.booklending.util.ResponseUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,20 +15,20 @@ public class GlobalExceptionHandler {
 
   @ExceptionHandler({MethodArgumentNotValidException.class, BindException.class})
   @ResponseStatus(HttpStatus.BAD_REQUEST)
-  public ResponseEntity<ApiRespDto<?>> handleValidationErrors(BindException e) {
+  public ResponseEntity<ApiErrorRespDto> handleValidationErrors(BindException e) {
     return ResponseUtil.failWithErrors(HttpStatus.BAD_REQUEST, "Validation failed",
         e.getBindingResult());
   }
 
   @ExceptionHandler(LoanRuleException.class)
   @ResponseStatus(HttpStatus.CONFLICT)
-  public ResponseEntity<ApiRespDto<?>> handleLoanRuleException(LoanRuleException e) {
+  public ResponseEntity<ApiErrorRespDto> handleLoanRuleException(LoanRuleException e) {
     return ResponseUtil.failWithMessage(HttpStatus.CONFLICT, e.getMessage());
   }
 
   @ExceptionHandler(ResourceNotFoundException.class)
   @ResponseStatus(HttpStatus.NOT_FOUND)
-  public ResponseEntity<ApiRespDto<?>> handleNotFound(ResourceNotFoundException e) {
+  public ResponseEntity<ApiErrorRespDto> handleNotFound(ResourceNotFoundException e) {
     return ResponseUtil.failWithMessage(HttpStatus.NOT_FOUND, e.getMessage());
   }
 

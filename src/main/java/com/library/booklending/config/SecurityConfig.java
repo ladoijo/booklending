@@ -21,9 +21,7 @@ public class SecurityConfig {
   private static final List<LibraryUser> LIBRARY_USERS = new ArrayList<>(
       List.of(
           new LibraryUser("userlibrarian", "userlibrarian1", "LIBRARIAN"),
-          new LibraryUser("usermember", "usermember1", "MEMBER")
-      )
-  );
+          new LibraryUser("usermember", "usermember1", "MEMBER")));
 
   @Bean
   SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) {
@@ -34,16 +32,19 @@ public class SecurityConfig {
                 "/swagger-ui/**",
                 "/v3/api-docs/**",
                 "/swagger-ui.html",
-                "/",
                 "/favicon.ico",
-                "/actuator/health/**"
-            ).permitAll()
+                "/actuator/**",
+                "/api/swagger-ui/**",
+                "/api/v3/api-docs/**",
+                "/api/swagger-ui.html",
+                "/api/favicon.ico",
+                "/api/actuator/**")
+            .permitAll()
             .requestMatchers("/api/v*/members/**").hasRole("LIBRARIAN")
             .requestMatchers(HttpMethod.GET, "/api/v*/books/**").hasRole("MEMBER")
             .requestMatchers("/api/v*/books/**").hasRole("LIBRARIAN")
             .requestMatchers("/api/v*/loans/**").hasAnyRole("MEMBER", "LIBRARIAN")
-            .anyRequest().authenticated()
-        )
+            .anyRequest().authenticated())
         .httpBasic(Customizer.withDefaults())
         .build();
   }
@@ -57,8 +58,7 @@ public class SecurityConfig {
               .username(libraryUser.username)
               .password(encoder.encode(libraryUser.password))
               .roles(libraryUser.role)
-              .build()
-      );
+              .build());
     }
     return manager;
   }
@@ -71,8 +71,7 @@ public class SecurityConfig {
   private record LibraryUser(
       String username,
       String password,
-      String role
-  ) {
+      String role) {
 
   }
 }

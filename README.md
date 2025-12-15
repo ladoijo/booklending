@@ -94,8 +94,7 @@ Edit `src/main/resources/application.properties` (or create `application-local.p
 
 App will be available at:
 
-- API base: `http://localhost:8080`
-- Health: `http://localhost:8080/actuator/health`
+- API base: `http://localhost:8080/api`
 
 ---
 
@@ -104,6 +103,18 @@ App will be available at:
 Suggested configuration keys (adapt to your project):
 
 ### Database
+
+Create database and schema locally or docker
+
+```sql
+CREATE
+DATABASE library WITH OWNER your_user_owner;
+
+CREATE SCHEMA booklending;
+
+ALTER
+SCHEMA booklending owner TO your_user_owner;
+```
 
 ```properties
 spring.datasource.url=jdbc:postgresql://localhost:5432/library?currentSchema=booklending
@@ -120,11 +131,11 @@ logging.level.org.springframework.web=INFO
 
 ### Security (optional)
 
-If you secure most endpoints, keep docs/health public:
+If you secure most endpoints, keep api docs/health public:
 
 ```java
 // Example patterns to permit without auth:
-// /v3/api-docs/**, /swagger-ui/**, /swagger-ui.html, /actuator/health/**
+// /api/v3/api-docs/**, /api/swagger-ui/**, /api/swagger-ui.html, /api/actuator/health/**
 ```
 
 ---
@@ -158,8 +169,8 @@ Usually:
 
 After running the app:
 
-- Swagger UI: `http://localhost:8080/swagger-ui/index.html`
-- OpenAPI JSON: `http://localhost:8080/v3/api-docs`
+- Swagger UI: `http://localhost:8080/api/swagger-ui/index.html`
+- OpenAPI JSON: `http://localhost:8080/api/v3/api-docs`
 
 If Swagger UI shows `{"error":"Unauthorized"}`, your security config is likely
 protecting `/swagger-ui/**` or `/v3/api-docs/**`. Add them to your allowlist or provide an auth
@@ -171,9 +182,9 @@ mechanism for Swagger.
 
 Common useful endpoints:
 
-- Health: `GET /actuator/health`
-- Info: `GET /actuator/info`
-- Metrics: `GET /actuator/metrics`
+- Health: `GET http://localhost:8080/api/actuator/health`
+- Info: `GET http://localhost:8080/api/actuator/info`
+- Metrics: `GET http://localhost:8080/api/actuator/metrics`
 
 To expose endpoints:
 
@@ -227,16 +238,8 @@ docker build -t booklending:local .
 
 ## Troubleshooting
 
-### Swagger UI returns `Unauthorized`
-
-- Ensure these are permitted in Spring Security:
-    - `/v3/api-docs/**`
-    - `/swagger-ui/**`
-    - `/swagger-ui.html`
-- If you use JWT, Swagger may need a Bearer token configured in OpenAPI.
-
 ### Liquibase: `no schema has been selected to create in`
 
-- Ensure the database exists and your user has permission.
+- Ensure the database and schema exists and your user has permission.
 - Consider setting:
     - `spring.liquibase.default-schema=public` (or your schema)

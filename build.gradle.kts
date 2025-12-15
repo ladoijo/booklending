@@ -24,6 +24,10 @@ repositories {
     mavenCentral()
 }
 
+springBoot {
+    buildInfo()
+}
+
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -40,12 +44,16 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.boot:spring-boot-starter-security-test")
+    testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("org.testcontainers:postgresql")
 //	testImplementation("org.springframework.boot:spring-boot-starter-actuator-test")
 //	testImplementation("org.springframework.boot:spring-boot-starter-data-jpa-test")
 //	testImplementation("org.springframework.boot:spring-boot-starter-liquibase-test")
 //	testImplementation("org.springframework.boot:spring-boot-starter-validation-test")
 //	testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testImplementation(platform("org.testcontainers:testcontainers-bom:1.20.4"))
+
 }
 
 tasks.withType<Test> {

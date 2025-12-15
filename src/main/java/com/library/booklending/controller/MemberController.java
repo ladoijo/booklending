@@ -3,11 +3,13 @@ package com.library.booklending.controller;
 import com.library.booklending.constant.Endpoint;
 import com.library.booklending.dto.ApiRespDto;
 import com.library.booklending.dto.MemberReqDto;
+import com.library.booklending.dto.MemberRespDto;
 import com.library.booklending.service.MemberService;
 import com.library.booklending.util.ResponseUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,28 +29,28 @@ public class MemberController {
 
   @Operation(summary = "List all members")
   @GetMapping(Endpoint.MEMBERS_V1)
-  public ResponseEntity<ApiRespDto<?>> findAll() {
+  public ResponseEntity<ApiRespDto<List<MemberRespDto>>> findAll() {
     var data = service.findAll();
     return ResponseUtil.okWithData(data);
   }
 
   @Operation(summary = "Get a member by id")
   @GetMapping(Endpoint.MEMBERS_BY_ID_V1)
-  public ResponseEntity<ApiRespDto<?>> findById(@PathVariable Long id) {
+  public ResponseEntity<ApiRespDto<MemberRespDto>> findById(@PathVariable Long id) {
     var data = service.findById(id);
     return ResponseUtil.okWithData(data);
   }
 
   @Operation(summary = "Create a new member")
   @PostMapping(Endpoint.MEMBERS_V1)
-  public ResponseEntity<ApiRespDto<?>> save(@Valid @RequestBody MemberReqDto reqDto) {
+  public ResponseEntity<ApiRespDto<MemberRespDto>> save(@Valid @RequestBody MemberReqDto reqDto) {
     var data = service.save(reqDto);
     return ResponseUtil.okWithData(data);
   }
 
   @Operation(summary = "Update a member")
   @PutMapping(Endpoint.MEMBERS_V1)
-  public ResponseEntity<ApiRespDto<?>> update(@Valid @RequestBody MemberReqDto reqDto) {
+  public ResponseEntity<ApiRespDto<MemberRespDto>> update(@Valid @RequestBody MemberReqDto reqDto) {
     var data = service.save(reqDto);
     return ResponseUtil.okWithData(data);
   }
