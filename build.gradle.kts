@@ -2,6 +2,7 @@ plugins {
     java
     id("org.springframework.boot") version "4.0.0"
     id("io.spring.dependency-management") version "1.1.7"
+    id("com.bakdata.mockito") version "1.11.1"
 }
 
 group = "com.library"
@@ -44,6 +45,8 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.boot:spring-boot-starter-security-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-data-jpa-test")
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:postgresql")
 //	testImplementation("org.springframework.boot:spring-boot-starter-actuator-test")
@@ -52,10 +55,15 @@ dependencies {
 //	testImplementation("org.springframework.boot:spring-boot-starter-validation-test")
 //	testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testRuntimeOnly("com.h2database:h2")
     testImplementation(platform("org.testcontainers:testcontainers-bom:1.20.4"))
 
 }
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+tasks.withType<Test>().configureEach {
+    jvmArgs("-Xshare:off")
 }
