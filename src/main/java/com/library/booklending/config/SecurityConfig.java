@@ -33,17 +33,12 @@ public class SecurityConfig {
                 "/v3/api-docs/**",
                 "/swagger-ui.html",
                 "/favicon.ico",
-                "/actuator/**",
-                "/api/swagger-ui/**",
-                "/api/v3/api-docs/**",
-                "/api/swagger-ui.html",
-                "/api/favicon.ico",
-                "/api/actuator/**")
+                "/actuator/**")
             .permitAll()
-            .requestMatchers("/api/v*/members/**").hasRole("LIBRARIAN")
-            .requestMatchers(HttpMethod.GET, "/api/v*/books/**").hasRole("MEMBER")
-            .requestMatchers("/api/v*/books/**").hasRole("LIBRARIAN")
-            .requestMatchers("/api/v*/loans/**").hasAnyRole("MEMBER", "LIBRARIAN")
+            .requestMatchers("/v*/members", "/v*/members/**").hasRole("LIBRARIAN")
+            .requestMatchers(HttpMethod.GET, "/v*/books**", "/v*/books/**").hasRole("MEMBER")
+            .requestMatchers("/v*/books**", "/v*/books/**").hasRole("LIBRARIAN")
+            .requestMatchers("/v*/loans**", "/v*/loans/**").hasAnyRole("MEMBER", "LIBRARIAN")
             .anyRequest().authenticated())
         .httpBasic(Customizer.withDefaults())
         .build();
