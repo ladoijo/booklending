@@ -15,11 +15,13 @@ services:
       retries: 10
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    restart: always
   backend:
     build: .
     container_name: backend
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     ports:
       - "8080:8080"
     restart: always
