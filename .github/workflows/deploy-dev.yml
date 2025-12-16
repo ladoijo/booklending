@@ -89,13 +89,13 @@ jobs:
 
             cd /opt/booklending  # folder on VPS where your ${{ env.DOCKER_FILENAME }} lives
 
-            if [ -z "$GHCR_PAT" ] || [ -z "$GHCR_USERNAME" ]; then
+            if [ -z ${{ secrets.GHCR_PAT }} ] || [ -z ${{ secrets.GHCR_USERNAME }} ]; then
               echo "GHCR credentials are missing. Ensure GHCR_USERNAME and GHCR_PAT secrets are set." >&2
               exit 1
             fi
 
-            echo "Logging in to GHCR as $GHCR_USERNAME..."
-            echo "$GHCR_PAT" | docker login "$REGISTRY" -u "$GHCR_USERNAME" --password-stdin
+            echo "Logging in to GHCR as ${{ secrets.GHCR_USERNAME }}..."
+            echo "${{ secrets.GHCR_PAT }}" | docker login ${{ env.REGISTRY }} -u ${{ secrets.GHCR_USERNAME }} --password-stdin
 
             echo "Cleaning unused Docker resources..."
             docker system prune -f
@@ -105,7 +105,3 @@ jobs:
 
             echo "Restarting backend service..."
             docker compose -f ${{ env.DOCKER_FILENAME }} up -d backend --remove-orphans
-        env:
-          REGISTRY: ${{ env.REGISTRY }}
-          GHCR_USERNAME: ${{ secrets.GHCR_USERNAME }}  # usually your GitHub username
-          GHCR_PAT: ${{ secrets.GHCR_PAT }}            # PAT with read:packages
