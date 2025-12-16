@@ -39,13 +39,13 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
-          cache: maven
+          cache: gradle
 
-      - name: Make mvnw executable
-        run: chmod +x ./mvnw
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
 
-      - name: Build without tests
-        run: ./mvnw clean package -DskipTests
+      - name: Build (skip tests)
+        run: ./gradlew clean build -x test
 
   build-and-push-image:
     runs-on: ubuntu-latest
